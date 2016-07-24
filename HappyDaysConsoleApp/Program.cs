@@ -3,6 +3,7 @@ using HappyDaysConsoleApp.Services;
 using Trainline.TrainlineService;
 using System;
 using RandomData;
+using NLog;
 
 namespace HappyDaysConsoleApp
 {
@@ -10,6 +11,7 @@ namespace HappyDaysConsoleApp
     {
         private static readonly IUnityContainer _container = BootStrapper.StartIoC();
         private static readonly ICustomerService _customerService = _container.Resolve<ICustomerService>();
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         static void Main(string[] args)
         {
@@ -25,6 +27,7 @@ namespace HappyDaysConsoleApp
             {
                 //Catch communication and timeout exceptions here if we want to retry or log exception
                 Console.WriteLine($"Exception {ex.Message}");
+                _logger.Error(ex);
             }
         }
 
