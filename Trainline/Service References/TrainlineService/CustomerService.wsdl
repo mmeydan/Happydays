@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://wsg.thetrainline.com/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="CustomerService" targetNamespace="http://wsg.thetrainline.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xs:schema xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="anyType" nillable="true" type="xs:anyType" />
+      <xs:element name="anyURI" nillable="true" type="xs:anyURI" />
+      <xs:element name="base64Binary" nillable="true" type="xs:base64Binary" />
+      <xs:element name="boolean" nillable="true" type="xs:boolean" />
+      <xs:element name="byte" nillable="true" type="xs:byte" />
+      <xs:element name="dateTime" nillable="true" type="xs:dateTime" />
+      <xs:element name="decimal" nillable="true" type="xs:decimal" />
+      <xs:element name="double" nillable="true" type="xs:double" />
+      <xs:element name="float" nillable="true" type="xs:float" />
+      <xs:element name="int" nillable="true" type="xs:int" />
+      <xs:element name="long" nillable="true" type="xs:long" />
+      <xs:element name="QName" nillable="true" type="xs:QName" />
+      <xs:element name="short" nillable="true" type="xs:short" />
+      <xs:element name="string" nillable="true" type="xs:string" />
+      <xs:element name="unsignedByte" nillable="true" type="xs:unsignedByte" />
+      <xs:element name="unsignedInt" nillable="true" type="xs:unsignedInt" />
+      <xs:element name="unsignedLong" nillable="true" type="xs:unsignedLong" />
+      <xs:element name="unsignedShort" nillable="true" type="xs:unsignedShort" />
+      <xs:element name="char" nillable="true" type="tns:char" />
+      <xs:simpleType name="char">
+        <xs:restriction base="xs:int" />
+      </xs:simpleType>
+      <xs:element name="duration" nillable="true" type="tns:duration" />
+      <xs:simpleType name="duration">
+        <xs:restriction base="xs:duration">
+          <xs:pattern value="\-?P(\d*D)?(T(\d*H)?(\d*M)?(\d*(\.\d*)?S)?)?" />
+          <xs:minInclusive value="-P10675199DT2H48M5.4775808S" />
+          <xs:maxInclusive value="P10675199DT2H48M5.4775807S" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:element name="guid" nillable="true" type="tns:guid" />
+      <xs:simpleType name="guid">
+        <xs:restriction base="xs:string">
+          <xs:pattern value="[\da-fA-F]{8}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{12}" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:attribute name="FactoryType" type="xs:QName" />
+      <xs:attribute name="Id" type="xs:ID" />
+      <xs:attribute name="Ref" type="xs:IDREF" />
+    </xs:schema>
+    <xs:schema elementFormDefault="qualified" targetNamespace="http://wsg.thetrainline.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:complexType name="ErrorResponse">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:Response">
+            <xs:sequence>
+              <xs:element name="Errors" nillable="true" type="tns:ArrayOfError" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="ErrorResponse" nillable="true" type="tns:ErrorResponse" />
+      <xs:complexType name="Response">
+        <xs:sequence />
+      </xs:complexType>
+      <xs:element name="Response" nillable="true" type="tns:Response" />
+      <xs:complexType name="ArrayOfError">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="Error" nillable="true" type="tns:Error" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfError" nillable="true" type="tns:ArrayOfError" />
+      <xs:complexType name="Error">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="AdditionalInfo" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="Error" nillable="true" type="tns:Error" />
+      <xs:complexType name="RequestEnvelope">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Authentication" nillable="true" type="tns:AuthenticationHeader" />
+          <xs:element minOccurs="0" name="Request" nillable="true" type="tns:RequestBody" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="RequestEnvelope" nillable="true" type="tns:RequestEnvelope" />
+      <xs:complexType name="AuthenticationHeader">
+        <xs:sequence />
+      </xs:complexType>
+      <xs:element name="AuthenticationHeader" nillable="true" type="tns:AuthenticationHeader" />
+      <xs:complexType name="UsernameAndPassword">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:AuthenticationHeader">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="Password" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="UsernameAndPassword" nillable="true" type="tns:UsernameAndPassword" />
+      <xs:complexType name="RequestBody">
+        <xs:sequence />
+      </xs:complexType>
+      <xs:element name="RequestBody" nillable="true" type="tns:RequestBody" />
+      <xs:element name="Process">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="requestEnvelope" nillable="true" type="tns:RequestEnvelope" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="ProcessResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="ProcessResult" nillable="true" type="tns:Response" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+    <xs:schema xmlns:tns="http://wsg.thetrainline.com/customerservice/v3.0/contract" elementFormDefault="qualified" targetNamespace="http://wsg.thetrainline.com/customerservice/v3.0/contract" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://wsg.thetrainline.com/" />
+      <xs:complexType name="AddAddressResponse">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q1="http://wsg.thetrainline.com/" base="q1:Response">
+            <xs:sequence />
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="AddAddressResponse" nillable="true" type="tns:AddAddressResponse" />
+      <xs:complexType name="GetSavedAddressesResponse">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q2="http://wsg.thetrainline.com/" base="q2:Response">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="Addresses" nillable="true" type="tns:ArrayOfAddress" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="GetSavedAddressesResponse" nillable="true" type="tns:GetSavedAddressesResponse" />
+      <xs:complexType name="ArrayOfAddress">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="Address" nillable="true" type="tns:Address" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfAddress" nillable="true" type="tns:ArrayOfAddress" />
+      <xs:complexType name="Address">
+        <xs:sequence>
+          <xs:element name="Alias" nillable="true" type="xs:string" />
+          <xs:element name="CountryCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="CountryName" nillable="true" type="xs:string" />
+          <xs:element name="Line1" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Line2" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Line3" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Line4" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Line5" nillable="true" type="xs:string" />
+          <xs:element name="Postcode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Type" nillable="true" type="tns:AddressType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="Address" nillable="true" type="tns:Address" />
+      <xs:simpleType name="AddressType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Billing" />
+          <xs:enumeration value="Delivery" />
+          <xs:enumeration value="Business" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:element name="AddressType" nillable="true" type="tns:AddressType" />
+      <xs:complexType name="UpdateAddressResponse">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q3="http://wsg.thetrainline.com/" base="q3:Response">
+            <xs:sequence />
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="UpdateAddressResponse" nillable="true" type="tns:UpdateAddressResponse" />
+      <xs:complexType name="AddPaymentCardResponse">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q4="http://wsg.thetrainline.com/" base="q4:Response">
+            <xs:sequence />
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="AddPaymentCardResponse" nillable="true" type="tns:AddPaymentCardResponse" />
+      <xs:complexType name="UpdateSavedPaymentCardResponse">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q5="http://wsg.thetrainline.com/" base="q5:Response">
+            <xs:sequence />
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="UpdateSavedPaymentCardResponse" nillable="true" type="tns:UpdateSavedPaymentCardResponse" />
+      <xs:complexType name="DeleteSavedPaymentCardResponse">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q6="http://wsg.thetrainline.com/" base="q6:Response">
+            <xs:sequence />
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="DeleteSavedPaymentCardResponse" nillable="true" type="tns:DeleteSavedPaymentCardResponse" />
+      <xs:complexType name="GetSavedPaymentCardsResponse">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q7="http://wsg.thetrainline.com/" base="q7:Response">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="BillingAddresses" nillable="true" type="tns:ArrayOfAddress" />
+              <xs:element minOccurs="0" name="PaymentCards" nillable="true" type="tns:ArrayOfPaymentCard" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="GetSavedPaymentCardsResponse" nillable="true" type="tns:GetSavedPaymentCardsResponse" />
+      <xs:complexType name="ArrayOfPaymentCard">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="PaymentCard" nillable="true" type="tns:PaymentCard" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfPaymentCard" nillable="true" type="tns:ArrayOfPaymentCard" />
+      <xs:complexType name="PaymentCard">
+        <xs:sequence>
+          <xs:element name="Alias" nillable="true" type="xs:string" />
+          <xs:element name="BillingAddressAlias" nillable="true" type="xs:string" />
+          <xs:element name="CardholderName" nillable="true" type="xs:string" />
+          <xs:element name="ExpiryMonth" type="xs:int" />
+          <xs:element name="ExpiryYear" type="xs:int" />
+          <xs:element name="IsDefault" type="xs:boolean" />
+          <xs:element name="PaymentCardNumber" nillable="true" type="xs:string" />
+          <xs:element name="Type" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Warning" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="PaymentCard" nillable="true" type="tns:PaymentCard" />
+      <xs:complexType name="ForgottenPasswordResponse">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q8="http://wsg.thetrainline.com/" base="q8:Response">
+            <xs:sequence />
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="ForgottenPasswordResponse" nillable="true" type="tns:ForgottenPasswordResponse" />
+      <xs:complexType name="RegisterCustomerResponse">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q9="http://wsg.thetrainline.com/" base="q9:Response">
+            <xs:sequence />
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="RegisterCustomerResponse" nillable="true" type="tns:RegisterCustomerResponse" />
+      <xs:complexType name="UpdateCustomerProfileResponse">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q10="http://wsg.thetrainline.com/" base="q10:Response">
+            <xs:sequence />
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="UpdateCustomerProfileResponse" nillable="true" type="tns:UpdateCustomerProfileResponse" />
+      <xs:complexType name="AddAddressRequest">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:CustomerServiceRequestBody">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="Address" nillable="true" type="tns:Address" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="AddAddressRequest" nillable="true" type="tns:AddAddressRequest" />
+      <xs:complexType name="CustomerServiceRequestBody">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q11="http://wsg.thetrainline.com/" base="q11:RequestBody">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="CustomerCredentials" nillable="true" type="tns:Credentials" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="CustomerServiceRequestBody" nillable="true" type="tns:CustomerServiceRequestBody" />
+      <xs:complexType name="Credentials">
+        <xs:sequence>
+          <xs:element name="EmailAddress" nillable="true" type="xs:string" />
+          <xs:element name="Password" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="Credentials" nillable="true" type="tns:Credentials" />
+      <xs:complexType name="GetSavedAddressesRequest">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:CustomerServiceRequestBody">
+            <xs:sequence />
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="GetSavedAddressesRequest" nillable="true" type="tns:GetSavedAddressesRequest" />
+      <xs:complexType name="UpdateAddressRequest">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:CustomerServiceRequestBody">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="Address" nillable="true" type="tns:Address" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="UpdateAddressRequest" nillable="true" type="tns:UpdateAddressRequest" />
+      <xs:complexType name="AddPaymentCardRequest">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:CustomerServiceRequestBody">
+            <xs:sequence>
+              <xs:element name="Alias" nillable="true" type="xs:string" />
+              <xs:element name="BillingAddressAlias" nillable="true" type="xs:string" />
+              <xs:element name="CardholderName" nillable="true" type="xs:string" />
+              <xs:element name="ExpiryMonth" type="xs:int" />
+              <xs:element name="ExpiryYear" type="xs:int" />
+              <xs:element name="IsDefault" type="xs:boolean" />
+              <xs:element name="PaymentCardNumber" nillable="true" type="xs:string" />
+              <xs:element name="Type" nillable="true" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="AddPaymentCardRequest" nillable="true" type="tns:AddPaymentCardRequest" />
+      <xs:complexType name="UpdateSavedPaymentCardRequest">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:CustomerServiceRequestBody">
+            <xs:sequence>
+              <xs:element name="Alias" nillable="true" type="xs:string" />
+              <xs:element name="BillingAddressAlias" nillable="true" type="xs:string" />
+              <xs:element name="CardholderName" nillable="true" type="xs:string" />
+              <xs:element name="ExpiryMonth" type="xs:int" />
+              <xs:element name="ExpiryYear" type="xs:int" />
+              <xs:element name="IsDefault" type="xs:boolean" />
+              <xs:element name="NewAlias" nillable="true" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="UpdateSavedPaymentCardRequest" nillable="true" type="tns:UpdateSavedPaymentCardRequest" />
+      <xs:complexType name="DeleteSavedPaymentCardRequest">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:CustomerServiceRequestBody">
+            <xs:sequence>
+              <xs:element name="Alias" nillable="true" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="DeleteSavedPaymentCardRequest" nillable="true" type="tns:DeleteSavedPaymentCardRequest" />
+      <xs:complexType name="GetSavedPaymentCardsRequest">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:CustomerServiceRequestBody">
+            <xs:sequence />
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="GetSavedPaymentCardsRequest" nillable="true" type="tns:GetSavedPaymentCardsRequest" />
+      <xs:complexType name="ForgottenPasswordRequest">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q12="http://wsg.thetrainline.com/" base="q12:RequestBody">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="EmailAddress" nillable="true" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="ForgottenPasswordRequest" nillable="true" type="tns:ForgottenPasswordRequest" />
+      <xs:complexType name="RegisterCustomerRequest">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:CustomerServiceRequestBody">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="CorporateReference" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="DataProtectionActConcentIndicators" nillable="true" type="tns:DataProtectionActConcentIndicators" />
+              <xs:element minOccurs="0" name="DaytimePhoneNumber" nillable="true" type="xs:string" />
+              <xs:element name="Forename" nillable="true" type="xs:string" />
+              <xs:element name="HomeAddress" nillable="true" type="tns:Address" />
+              <xs:element name="Surname" nillable="true" type="xs:string" />
+              <xs:element name="TermAndConditionsConsentIndicator" type="xs:boolean" />
+              <xs:element name="Title" nillable="true" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="RegisterCustomerRequest" nillable="true" type="tns:RegisterCustomerRequest" />
+      <xs:complexType name="DataProtectionActConcentIndicators">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="DataProtectionAct1984ConsentIndicator" type="xs:boolean" />
+          <xs:element minOccurs="0" name="DataProtectionAct2003ConsentIndicator" type="xs:boolean" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="DataProtectionActConcentIndicators" nillable="true" type="tns:DataProtectionActConcentIndicators" />
+      <xs:complexType name="UpdateCustomerProfileRequest">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:CustomerServiceRequestBody">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="CorporateReference" nillable="true" type="xs:string" />
+              <xs:element name="DataProtectionActConcentIndicators" nillable="true" type="tns:DataProtectionActConcentIndicators" />
+              <xs:element minOccurs="0" name="DaytimePhoneNumber" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="EveningPhoneNumber" nillable="true" type="xs:string" />
+              <xs:element name="Forename" nillable="true" type="xs:string" />
+              <xs:element name="HomeAddress" nillable="true" type="tns:Address" />
+              <xs:element minOccurs="0" name="MobilePhoneNumber" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="NewEmailAddress" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="NewPassword" nillable="true" type="xs:string" />
+              <xs:element name="Surname" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="TermsAndConditionsConsentIndicator" type="xs:boolean" />
+              <xs:element name="Title" nillable="true" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="UpdateCustomerProfileRequest" nillable="true" type="tns:UpdateCustomerProfileRequest" />
+    </xs:schema>
+    <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/WSG.CustomerService.Common.Contract.Test" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/WSG.CustomerService.Common.Contract.Test" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://wsg.thetrainline.com/" />
+      <xs:complexType name="PingResponse">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q1="http://wsg.thetrainline.com/" base="q1:Response">
+            <xs:sequence />
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="PingResponse" nillable="true" type="tns:PingResponse" />
+      <xs:complexType name="PingRequest">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q2="http://wsg.thetrainline.com/" base="q2:RequestBody">
+            <xs:sequence />
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="PingRequest" nillable="true" type="tns:PingRequest" />
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="IService_Process_InputMessage">
+    <wsdl:part name="parameters" element="tns:Process" />
+  </wsdl:message>
+  <wsdl:message name="IService_Process_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ProcessResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IService">
+    <wsdl:operation name="Process">
+      <wsdl:input wsaw:Action="http://wsg.thetrainline.com/IService/Process" message="tns:IService_Process_InputMessage" />
+      <wsdl:output wsaw:Action="http://wsg.thetrainline.com/IService/ProcessResponse" message="tns:IService_Process_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="soap" type="tns:IService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Process">
+      <soap:operation soapAction="http://wsg.thetrainline.com/IService/Process" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CustomerService">
+    <wsdl:port name="soap" binding="tns:soap">
+      <soap:address location="https://wsg.testthetrainline.com/CustomerService/V3.0/Customer.svc/soap" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
